@@ -8,42 +8,21 @@ import TextStepContainer from './TextStepContainer';
 
 class TextStep extends Component {
   /* istanbul ignore next */
-  state = {
-    loading: true
-  };
-
-  componentDidMount() {
-    const { step, speak, previousValue, triggerNextStep } = this.props;
-    const { component, delay, waitAction } = step;
-    const isComponentWatingUser = component && waitAction;
-
-    setTimeout(() => {
-      this.setState({ loading: false }, () => {
-        if (!isComponentWatingUser && !step.rendered) {
-          triggerNextStep();
-        }
-        speak(step, previousValue);
-      });
-    }, delay);
-  }
-
   getMessage = () => {
-    const { previousValue, step } = this.props;
+    const { step } = this.props;
     const { message } = step;
 
-    return message ? message.replace(/{previousValue}/g, previousValue) : '';
+    return message || '';
   };
 
   renderMessage = () => {
-    const { step, steps, previousStep, triggerNextStep } = this.props;
+    const { step, steps } = this.props;
     const { component } = step;
 
     if (component) {
       return React.cloneElement(component, {
         step,
-        steps,
-        previousStep,
-        triggerNextStep
+        steps
       });
     }
 
@@ -58,9 +37,9 @@ class TextStep extends Component {
       avatarStyle,
       bubbleStyle,
       hideBotAvatar,
-      hideUserAvatar
+      hideUserAvatar,
+      isLoading
     } = this.props;
-    const { loading } = this.state;
     const { avatar, user, botName } = step;
 
     const showAvatar = user ? !hideUserAvatar : !hideBotAvatar;
@@ -75,7 +54,7 @@ class TextStep extends Component {
               className="rsc-ts-image"
               style={avatarStyle}
               showAvatar={showAvatar}
-              user={user}
+              isUser={user}
               src={avatar}
               alt={imageAltText}
             />
@@ -89,7 +68,7 @@ class TextStep extends Component {
           isFirst={isFirst}
           isLast={isLast}
         >
-          {loading ? <Loading /> : this.renderMessage()}
+          {isLoading ? <Loading /> : this.renderMessage() }
         </Bubble>
       </TextStepContainer>
     );
@@ -113,15 +92,15 @@ TextStep.propTypes = {
   ]),
   speak: PropTypes.func,
   step: PropTypes.objectOf(PropTypes.any).isRequired,
-  steps: PropTypes.objectOf(PropTypes.any),
-  triggerNextStep: PropTypes.func.isRequired
+  steps: PropTypes.objectOf(PropTypes.any)
 };
 
 TextStep.defaultProps = {
   previousStep: {},
   previousValue: '',
   speak: () => {},
-  steps: {}
+  steps: {},
+  isLoading: false
 };
 
 export default TextStep;
