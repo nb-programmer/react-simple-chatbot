@@ -382,7 +382,7 @@ class ChatBotWidget extends Component {
   }
 
   async #insertAllResponses(gen) {
-    for (const reply_message of gen) {
+    for await (const reply_message of gen) {
       await this.handleBotMessage(reply_message);
     }
   }

@@ -37,7 +37,7 @@ async function send_test(message) {
     setTimeout(r, 2000);
   }).then(() => console.log("Sent"));
 
-  return function*() {
+  return async function*() {
     console.log("Receiving");
     yield new Promise(r => setTimeout(() => r("Hello"), 2000));
     console.log("Recieved 1");
