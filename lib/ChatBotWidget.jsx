@@ -160,7 +160,7 @@ class ChatBotWidget extends Component {
                 ref={this.setInputRef}
                 className="rsc-input"
                 placeholder={inputInvalid ? '' : inputPlaceholder}
-                onKeyPress={this.handleKeyPress.bind(this)}
+                onKeyDown={this.handleKeyPress.bind(this)}
                 onChange={this.onValueChange.bind(this)}
                 value={inputValue}
                 floating={floating}
